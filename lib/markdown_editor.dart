@@ -1,12 +1,15 @@
+import 'dart:math';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:universal_html/html.dart' as html;
-import 'package:web_node/web_node.dart';
 
 Map<String, String> textData = {};
 
 class MarkdownEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final id = Random().nextInt(1000);
     final iFrame = html.IFrameElement();
     final editor = iFrame.ownerDocument!.querySelector("#editor");
     iFrame.srcdoc = """
@@ -21,9 +24,9 @@ class MarkdownEditor extends StatelessWidget {
       initialEditType: 'markdown',
       previewStyle: 'vertical'
     });
-    
+
     document.getElementById("editor").addEventListener("change", (function(){
-      
+
     }));
     editor.getMarkdown();
     </script>
@@ -34,6 +37,14 @@ class MarkdownEditor extends StatelessWidget {
       textData[this.hashCode.toString()] = editor.innerText;
     });
 
-    return WebNode(node: iFrame);
+    // ignore: undefined_prefixed_name
+    ui.platformViewRegistry.registerViewFactory(
+        'markdown-editor' + id.toString(),
+        (int viewId) => iFrame
+          ..width = '640'
+          ..height = '360'
+          ..style.border = 'none');
+
+    return HtmlElementView(viewType: 'markdown-editor' + id.toString());
   }
 }
