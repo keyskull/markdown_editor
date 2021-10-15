@@ -7,11 +7,13 @@ import 'package:universal_html/html.dart' as html;
 Map<String, String> textData = {};
 
 class MarkdownEditor extends StatelessWidget {
+  const MarkdownEditor({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final id = Random().nextInt(1000);
     final iFrame = html.IFrameElement();
-    final editor = iFrame.ownerDocument!.querySelector("#editor");
+    final editor = iFrame.ownerDocument!.querySelector('#editor');
     iFrame.srcdoc = """
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
@@ -32,9 +34,9 @@ class MarkdownEditor extends StatelessWidget {
     </script>
         """;
 
-    editor?.innerText = textData[this.hashCode.toString()] ?? "";
+    editor?.innerText = textData[hashCode.toString()] ?? '';
     editor?.addEventListener('change', (event) {
-      textData[this.hashCode.toString()] = editor.innerText;
+      textData[hashCode.toString()] = editor.innerText;
     });
 
     // ignore: undefined_prefixed_name
